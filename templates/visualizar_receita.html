@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ receita.nome }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            
+            <!-- Cabeçalho da Receita -->
+            <div class="mb-4">
+                <h2>{{ receita.nome }}</h2>
+                
+                <div class="mb-3">
+                    <span class="badge bg-secondary fs-6">{{ receita.categoria }}</span>
+                    <span class="badge bg-info fs-6">{{ receita.dificuldade }}</span>
+                    <span class="badge bg-warning text-dark fs-6">⏱️ {{ receita.tempo_preparo }} minutos</span>
+                </div>
+            </div>
+            
+            <!-- Card de Ingredientes -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📝 Ingredientes</h5>
+                </div>
+                <div class="card-body">
+                    <pre class="mb-0" style="white-space: pre-wrap; font-family: inherit;">{{ receita.ingredientes }}</pre>
+                </div>
+            </div>
+            
+            <!-- Card de Modo de Preparo -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">👨‍🍳 Modo de Preparo</h5>
+                </div>
+                <div class="card-body">
+                    <pre class="mb-0" style="white-space: pre-wrap; font-family: inherit;">{{ receita.modo_preparo }}</pre>
+                </div>
+            </div>
+            
+            <!-- Botões de Ação -->
+            <div class="d-flex gap-2 mb-4">
+                <!-- Botões Editar e Deletar virão nos próximos passos -->
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                    ⬅️ Voltar
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

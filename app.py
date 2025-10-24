@@ -11,6 +11,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+# Criar tabelas
+with app.app_context():
+    db.create_all()
+
 # Configuração do Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -95,26 +99,21 @@ def adicionar_receita():
             dificuldade=dificuldade,
             usuario_id=current_user.id
         )
-        
         db.session.add(nova_receita)
         db.session.commit()
-        
         flash('Receita adicionada com sucesso!')
         return redirect(url_for('index'))
-    
     return render_template('adicionar_receita.html')
 
-# Criar tabelas
-with app.app_context():
-    db.create_all()
-
-# TESTE: Ver todas as rotas registradas
-@app.route('/debug-rotas')
-def debug_rotas():
-    rotas = []
-    for rule in app.url_map.iter_rules():
-        rotas.append(f"{rule.endpoint} -> {rule.rule}")
-    return "<br>".join(rotas)
+# Rota para visualizar receita
+@app.route('/receita/<int:id>')
+@login_required
+def visualizar_receita(id):
+    receita = Receita.query.get_or_404(id)
+    if receita.usuario_id != current_user.id:
+        flash('Você não tem permissão para ver esta receita!')
+        return redirect(url_for('index'))
+    return render_template('visualizar_receita.html', receita=receita)
 
 if __name__ == '__main__':
     app.run(debug=True)

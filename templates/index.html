@@ -23,6 +23,9 @@
                             ⏱️ {{ receita.tempo_preparo }} min
                         </p>
                     </div>
+                    <div class="card-footer bg-white border-top">
+                        <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-sm btn-primary">Ver</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}
