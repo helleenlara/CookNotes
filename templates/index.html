@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Minhas Receitas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🍳 Minhas Receitas</h2>
+        <a href="{{ url_for('adicionar_receita') }}" class="btn btn-success">+ Nova Receita</a>
+    </div>
+    
+    {% if receitas %}
+        <div class="row">
+            {% for receita in receitas %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ receita.nome }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <span class="badge bg-secondary">{{ receita.categoria }}</span>
+                                <span class="badge bg-info">{{ receita.dificuldade }}</span>
+                            </small><br>
+                            ⏱️ {{ receita.tempo_preparo }} min
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p>Você ainda não tem receitas cadastradas.</p>
+            <a href="{{ url_for('adicionar_receita') }}" class="btn btn-primary">Adicionar minha primeira receita</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

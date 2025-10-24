@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Nova Receita{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📝 Adicionar Nova Receita</h2>
+
+    <form method="POST" class="mt-4">
+        <!-- Nome da Receita -->
+        <div class="mb-3">
+            <label class="form-label">Nome da Receita *</label>
+            <input type="text" name="nome" class="form-control" required placeholder="Ex: Bolo de Chocolate">
+        </div>
+        
+        <!-- Linha com 3 campos -->
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Tempo de Preparo (min) *</label>
+                <input type="number" name="tempo_preparo" class="form-control" required placeholder="Ex: 45">
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Categoria *</label>
+                <select name="categoria" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    <option value="Doce">Doce</option>
+                    <option value="Salgado">Salgado</option>
+                    <option value="Vegano">Vegano</option>
+                    <option value="Vegetariano">Vegetariano</option>
+                    <option value="Fitness">Fitness</option>
+                </select>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Dificuldade *</label>
+                <select name="dificuldade" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    <option value="Fácil">Fácil</option>
+                    <option value="Médio">Médio</option>
+                    <option value="Difícil">Difícil</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Ingredientes -->
+        <div class="mb-3">
+            <label class="form-label">Ingredientes *</label>
+            <textarea name="ingredientes" class="form-control" rows="5" required placeholder="Ex:&#10;- 2 xícaras de farinha&#10;- 3 ovos&#10;- 1 xícara de açúcar"></textarea>
+        </div>
+        
+        <!-- Modo de Preparo -->
+        <div class="mb-3">
+            <label class="form-label">Modo de Preparo *</label>
+            <textarea name="modo_preparo" class="form-control" rows="8" required placeholder="Descreva o passo a passo..."></textarea>
+        </div>
+        
+        <!-- Botões -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">💾 Salvar Receita</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">❌ Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

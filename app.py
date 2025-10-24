@@ -28,13 +28,11 @@ def cadastro():
         email = request.form['email']
         senha = request.form['senha']
         
-        # Verifica se email já existe
         usuario_existe = Usuario.query.filter_by(email=email).first()
         if usuario_existe:
             flash('Email já cadastrado!')
             return redirect(url_for('cadastro'))
         
-        # Cria novo usuário
         senha_hash = generate_password_hash(senha)
         novo_usuario = Usuario(nome=nome, email=email, senha=senha_hash)
         db.session.add(novo_usuario)
@@ -69,15 +67,54 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# Rota principal (temporária)
+# Rota principal
 @app.route('/')
 @login_required
 def index():
-    return '<h1>Bem-vindo ao CookNotes!</h1><a href="/logout">Sair</a>'
+    receitas = Receita.query.filter_by(usuario_id=current_user.id).all()
+    return render_template('index.html', receitas=receitas)
 
-# Criar as tabelas
+# Rota adicionar receita
+@app.route('/adicionar', methods=['GET', 'POST'])
+@login_required
+def adicionar_receita():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        ingredientes = request.form['ingredientes']
+        modo_preparo = request.form['modo_preparo']
+        tempo_preparo = request.form['tempo_preparo']
+        categoria = request.form['categoria']
+        dificuldade = request.form['dificuldade']
+        
+        nova_receita = Receita(
+            nome=nome,
+            ingredientes=ingredientes,
+            modo_preparo=modo_preparo,
+            tempo_preparo=tempo_preparo,
+            categoria=categoria,
+            dificuldade=dificuldade,
+            usuario_id=current_user.id
+        )
+        
+        db.session.add(nova_receita)
+        db.session.commit()
+        
+        flash('Receita adicionada com sucesso!')
+        return redirect(url_for('index'))
+    
+    return render_template('adicionar_receita.html')
+
+# Criar tabelas
 with app.app_context():
     db.create_all()
+
+# TESTE: Ver todas as rotas registradas
+@app.route('/debug-rotas')
+def debug_rotas():
+    rotas = []
+    for rule in app.url_map.iter_rules():
+        rotas.append(f"{rule.endpoint} -> {rule.rule}")
+    return "<br>".join(rotas)
 
 if __name__ == '__main__':
     app.run(debug=True)
