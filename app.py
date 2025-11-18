@@ -115,5 +115,28 @@ def visualizar_receita(id):
         return redirect(url_for('index'))
     return render_template('visualizar_receita.html', receita=receita)
 
+#Rota editar receita
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_receita(id):
+    receita = Receita.query.get_or_404(id)
+    if receita.usuario_id != current_user.id:
+        flash('Você não tem permissão para editar esta receita!')
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        receita.nome = request.form['nome']
+        receita.ingredientes = request.form['ingredientes']
+        receita.modo_preparo = request.form['modo_preparo']
+        receita.tempo_preparo = request.form['tempo_preparo']
+        receita.categoria = request.form['categoria']
+        receita.dificuldade = request.form['dificuldade']
+        
+        db.session.commit()
+        flash('Receita atualizada com sucesso!')
+        return redirect(url_for('visualizar_receita', id=receita.id))
+    
+    return render_template('editar_receita.html', receita=receita)
+
 if __name__ == '__main__':
     app.run(debug=True)

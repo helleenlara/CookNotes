@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Editar Receita{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>✏️ Editar Receita</h2>
+
+    <form method="POST" class="mt-4">
+        <!-- Nome da Receita -->
+        <div class="mb-3">
+            <label class="form-label">Nome da Receita *</label>
+            <input type="text" name="nome" class="form-control" required value="{{ receita.nome }}">
+        </div>
+        
+        <!-- Linha com 3 campos -->
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Tempo de Preparo (min) *</label>
+                <input type="number" name="tempo_preparo" class="form-control" required value="{{ receita.tempo_preparo }}">
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Categoria *</label>
+                <select name="categoria" class="form-select" required>
+                    <option value="Doce" {% if receita.categoria == 'Doce' %}selected{% endif %}>Doce</option>
+                    <option value="Salgado" {% if receita.categoria == 'Salgado' %}selected{% endif %}>Salgado</option>
+                    <option value="Vegano" {% if receita.categoria == 'Vegano' %}selected{% endif %}>Vegano</option>
+                    <option value="Vegetariano" {% if receita.categoria == 'Vegetariano' %}selected{% endif %}>Vegetariano</option>
+                    <option value="Fitness" {% if receita.categoria == 'Fitness' %}selected{% endif %}>Fitness</option>
+                </select>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Dificuldade *</label>
+                <select name="dificuldade" class="form-select" required>
+                    <option value="Fácil" {% if receita.dificuldade == 'Fácil' %}selected{% endif %}>Fácil</option>
+                    <option value="Médio" {% if receita.dificuldade == 'Médio' %}selected{% endif %}>Médio</option>
+                    <option value="Difícil" {% if receita.dificuldade == 'Difícil' %}selected{% endif %}>Difícil</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Ingredientes -->
+        <div class="mb-3">
+            <label class="form-label">Ingredientes *</label>
+            <textarea name="ingredientes" class="form-control" rows="5" required>{{ receita.ingredientes }}</textarea>
+        </div>
+        
+        <!-- Modo de Preparo -->
+        <div class="mb-3">
+            <label class="form-label">Modo de Preparo *</label>
+            <textarea name="modo_preparo" class="form-control" rows="8" required>{{ receita.modo_preparo }}</textarea>
+        </div>
+        
+        <!-- Botões -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">💾 Salvar Alterações</button>
+            <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-secondary">❌ Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
