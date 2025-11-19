@@ -75,7 +75,14 @@ def logout():
 @app.route('/')
 @login_required
 def index():
-    receitas = Receita.query.filter_by(usuario_id=current_user.id).all()
+    query = Receita.query.filter_by(usuario_id=current_user.id)
+    busca = request.args.get('busca')
+    if busca:
+        query = query.filter(Receita.nome.contains(busca))
+    categoria = request.args.get('categoria')
+    if categoria:
+        query = query.filter_by(categoria=categoria)
+    receitas = query.all()
     return render_template('index.html', receitas=receitas)
 
 # Rota adicionar receita

@@ -8,6 +8,33 @@
         <a href="{{ url_for('adicionar_receita') }}" class="btn btn-success">+ Nova Receita</a>
     </div>
     
+    <!-- FORMULÁRIO DE BUSCA E FILTRO (NOVO!) -->
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="busca" class="form-control" placeholder="Buscar por nome..." value="{{ request.args.get('busca', '') }}">
+        </div>
+        <div class="col-md-4">
+            <select name="categoria" class="form-select">
+                <option value="">Todas as categorias</option>
+                <option value="Doce" {% if request.args.get('categoria') == 'Doce' %}selected{% endif %}>Doce</option>
+                <option value="Salgado" {% if request.args.get('categoria') == 'Salgado' %}selected{% endif %}>Salgado</option>
+                <option value="Vegano" {% if request.args.get('categoria') == 'Vegano' %}selected{% endif %}>Vegano</option>
+                <option value="Vegetariano" {% if request.args.get('categoria') == 'Vegetariano' %}selected{% endif %}>Vegetariano</option>
+                <option value="Fitness" {% if request.args.get('categoria') == 'Fitness' %}selected{% endif %}>Fitness</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">🔍 Filtrar</button>
+        </div>
+    </form>
+
+    <!-- BOTÃO PARA LIMPAR FILTROS (NOVO!) -->
+    {% if request.args.get('busca') or request.args.get('categoria') %}
+    <div class="mb-3">
+        <a href="{{ url_for('index') }}" class="btn btn-sm btn-secondary">✖️ Limpar filtros</a>
+    </div>
+    {% endif %}
+    
     {% if receitas %}
         <div class="row">
             {% for receita in receitas %}
@@ -32,8 +59,12 @@
         </div>
     {% else %}
         <div class="alert alert-info text-center">
-            <p>Você ainda não tem receitas cadastradas.</p>
-            <a href="{{ url_for('adicionar_receita') }}" class="btn btn-primary">Adicionar minha primeira receita</a>
+            <p>Nenhuma receita encontrada.</p>
+            {% if request.args.get('busca') or request.args.get('categoria') %}
+                <p>Tente ajustar os filtros ou <a href="{{ url_for('index') }}">ver todas as receitas</a>.</p>
+            {% else %}
+                <a href="{{ url_for('adicionar_receita') }}" class="btn btn-primary">Adicionar minha primeira receita</a>
+            {% endif %}
         </div>
     {% endif %}
 </div>
