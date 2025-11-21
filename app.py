@@ -75,7 +75,14 @@ def logout():
 @app.route('/')
 @login_required
 def index():
-    receitas = Receita.query.filter_by(usuario_id=current_user.id).all()
+    query = Receita.query.filter_by(usuario_id=current_user.id)
+    busca = request.args.get('busca')
+    if busca:
+        query = query.filter(Receita.nome.contains(busca))
+    categoria = request.args.get('categoria')
+    if categoria:
+        query = query.filter_by(categoria=categoria)
+    receitas = query.all()
     return render_template('index.html', receitas=receitas)
 
 # Rota adicionar receita
@@ -138,5 +145,29 @@ def editar_receita(id):
     
     return render_template('editar_receita.html', receita=receita)
 
+# Rota para deletar receita
+@app.route('/deletar/<int:id>')
+@login_required
+def deletar_receita(id):
+    receita = Receita.query.get_or_404(id)
+    if receita.usuario_id != current_user.id:
+        flash('Você não tem permissão para deletar esta receita!')
+        return redirect(url_for('index'))
+    
+    db.session.delete(receita)
+    db.session.commit()
+    flash('Receita deletada com sucesso!')
+    return redirect(url_for('index'))
+
+#Debug listar todas as rotas
+print("\n" + "="*50)
+print("🔍 ROTAS REGISTRADAS NO FLASK:")
+print("="*50)
+for rule in app.url_map.iter_rules():
+    print(f"  {rule.endpoint:30s} -> {rule.rule}")
+print("="*50 + "\n")
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
