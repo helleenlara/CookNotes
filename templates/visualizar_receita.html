@@ -42,7 +42,7 @@
                 <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-warning">
                     ✏️ Editar
                 </a>
-                <a href="{{ url_for('deletar_receita', id=receita.id) }}"
+                <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
                     class="btn btn-danger" 
                     onclick="return confirm('⚠️ Tem certeza que deseja deletar esta receita? Esta ação não pode ser desfeita!')">
                         🗑️ Deletar
