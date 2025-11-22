@@ -6,8 +6,14 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '4b613365e58aed8a91ecf761164c249f'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///receitas.db'
+
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///receitas.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 db.init_app(app)
 
