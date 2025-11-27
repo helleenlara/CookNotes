@@ -26,6 +26,17 @@ db.init_app(app)
 # Criar tabelas
 with app.app_context():
     db.create_all()
+    try:
+        from sqlalchemy import text
+        db.session.execute(text("""
+            ALTER TABLE receita 
+            ADD COLUMN IF NOT EXISTS imagem VARCHAR(300);
+        """))
+        db.session.commit()
+        print("✅ Coluna 'imagem' verificada/criada!")
+    except Exception as e:
+        print(f"ℹ️ Coluna já existe ou erro: {e}")
+        db.session.rollback()
 
 # Configuração do Flask-Login
 login_manager = LoginManager()
