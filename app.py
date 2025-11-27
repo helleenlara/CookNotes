@@ -50,23 +50,30 @@ def load_user(user_id):
 # Rota de cadastro
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         nome = request.form['nome']
         email = request.form['email']
         senha = request.form['senha']
         
-        usuario_existe = Usuario.query.filter_by(email=email).first()
-        if usuario_existe:
-            flash('Email já cadastrado!')
+        if Usuario.query.filter_by(email=email).first():
+            flash('Este email já está cadastrado!')
             return redirect(url_for('cadastro'))
         
+        # Cria novo usuário
         senha_hash = generate_password_hash(senha)
         novo_usuario = Usuario(nome=nome, email=email, senha=senha_hash)
+        
         db.session.add(novo_usuario)
         db.session.commit()
         
-        flash('Cadastro realizado com sucesso!')
-        return redirect(url_for('login'))
+        # Faz login automático
+        login_user(novo_usuario)
+        flash('Cadastro realizado com sucesso! Bem-vindo(a)!')
+        
+        return redirect(url_for('index'))
     
     return render_template('cadastro.html')
 

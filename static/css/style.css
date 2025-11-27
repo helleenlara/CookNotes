@@ -475,3 +475,115 @@ pre {
   box-shadow: var(--sombra-media);
   margin-bottom: 1.5rem;
 }
+/* ----- ESTADO VAZIO ----- */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--fundo-card);
+  border-radius: var(--borda-card);
+  box-shadow: var(--sombra-leve);
+  margin: 2rem 0;
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  color: var(--cor-primaria);
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  color: var(--texto-primario);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.empty-state p {
+  color: var(--texto-secundario);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.empty-state .btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  box-shadow: var(--sombra-media);
+}
+/*PÁGINA DE AUTENTICAÇÃO (LOGIN/CADASTRO)*/
+.auth-page {
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 450px;
+}
+
+.auth-card {
+  background: var(--fundo-card);
+  border-radius: var(--borda-card);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 3rem;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--cor-primaria);
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.logo-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--texto-primario);
+  margin-bottom: 0.5rem;
+}
+
+.welcome-text {
+  color: var(--texto-secundario);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.auth-form .input-group-text {
+  background: transparent;
+  border-right: none;
+}
+
+.auth-form .form-control {
+  border-left: none;
+}
+
+.auth-form .form-control:focus {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
+
+.auth-form .input-group-text {
+  border-color: #dee2e6;
+}
