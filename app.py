@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Usuario, Receita
 import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '4b613365e58aed8a91ecf761164c249f'
@@ -12,6 +13,13 @@ if database_url.startswith('postgres://'):
     database_url = database_url.replace('postgres://', 'postgresql://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Pasta onde as imagens serão salvas
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # Limite de 5MB por imagem
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}  # Tipos permitidos
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 db.init_app(app)
 
@@ -100,6 +108,19 @@ def adicionar_receita():
         tempo_preparo = request.form['tempo_preparo']
         categoria = request.form['categoria']
         dificuldade = request.form['dificuldade']
+
+        imagem_path = None
+        if 'imagem' in request.files:
+            file = request.files['imagem']
+            # Se o usuário selecionou um arquivo válido
+            if file and file.filename != '' and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                from datetime import datetime
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f"{timestamp}_{filename}"
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+                imagem_path = f"uploads/{filename}"
         
         nova_receita = Receita(
             nome=nome,
@@ -108,12 +129,16 @@ def adicionar_receita():
             tempo_preparo=tempo_preparo,
             categoria=categoria,
             dificuldade=dificuldade,
+            imagem=imagem_path,
             usuario_id=current_user.id
         )
+
         db.session.add(nova_receita)
         db.session.commit()
+
         flash('Receita adicionada com sucesso!')
         return redirect(url_for('index'))
+    
     return render_template('adicionar_receita.html')
 
 # Rota para visualizar receita
@@ -143,7 +168,26 @@ def editar_receita(id):
         receita.categoria = request.form['categoria']
         receita.dificuldade = request.form['dificuldade']
         
+        if 'imagem' in request.files:
+            file = request.files['imagem']
+            if file and file.filename != '' and allowed_file(file.filename):
+                # Deletar imagem antiga se existir
+                if receita.imagem:
+                    old_image_path = os.path.join('static', receita.imagem)
+                    if os.path.exists(old_image_path):
+                        os.remove(old_image_path)
+                
+                # Salvar nova imagem
+                filename = secure_filename(file.filename)
+                from datetime import datetime
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f"{timestamp}_{filename}"
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+                receita.imagem = f"uploads/{filename}"
+        
         db.session.commit()
+        
         flash('Receita atualizada com sucesso!')
         return redirect(url_for('visualizar_receita', id=receita.id))
     

@@ -2,70 +2,97 @@
 {% block title %}Minhas Receitas{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>🍳 Minhas Receitas</h2>
-        <a href="{{ url_for('adicionar_receita') }}" class="btn btn-success">+ Nova Receita</a>
-    </div>
-    
-    <!-- FORMULÁRIO DE BUSCA E FILTRO (NOVO!) -->
-    <form method="GET" class="row g-3 mb-4">
-        <div class="col-md-6">
-            <input type="text" name="busca" class="form-control" placeholder="Buscar por nome..." value="{{ request.args.get('busca', '') }}">
-        </div>
-        <div class="col-md-4">
-            <select name="categoria" class="form-select">
-                <option value="">Todas as categorias</option>
-                <option value="Doce" {% if request.args.get('categoria') == 'Doce' %}selected{% endif %}>Doce</option>
-                <option value="Salgado" {% if request.args.get('categoria') == 'Salgado' %}selected{% endif %}>Salgado</option>
-                <option value="Vegano" {% if request.args.get('categoria') == 'Vegano' %}selected{% endif %}>Vegano</option>
-                <option value="Vegetariano" {% if request.args.get('categoria') == 'Vegetariano' %}selected{% endif %}>Vegetariano</option>
-                <option value="Fitness" {% if request.args.get('categoria') == 'Fitness' %}selected{% endif %}>Fitness</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">🔍 Filtrar</button>
-        </div>
-    </form>
-
-    <!-- BOTÃO PARA LIMPAR FILTROS (NOVO!) -->
-    {% if request.args.get('busca') or request.args.get('categoria') %}
-    <div class="mb-3">
-        <a href="{{ url_for('index') }}" class="btn btn-sm btn-secondary">✖️ Limpar filtros</a>
-    </div>
-    {% endif %}
-    
-    {% if receitas %}
-        <div class="row">
-            {% for receita in receitas %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ receita.nome }}</h5>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <span class="badge bg-secondary">{{ receita.categoria }}</span>
-                                <span class="badge bg-info">{{ receita.dificuldade }}</span>
-                            </small><br>
-                            ⏱️ {{ receita.tempo_preparo }} min
-                        </p>
-                    </div>
-                    <div class="card-footer bg-white border-top">
-                        <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-sm btn-primary">Ver</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="alert alert-info text-center">
-            <p>Nenhuma receita encontrada.</p>
-            {% if request.args.get('busca') or request.args.get('categoria') %}
-                <p>Tente ajustar os filtros ou <a href="{{ url_for('index') }}">ver todas as receitas</a>.</p>
-            {% else %}
-                <a href="{{ url_for('adicionar_receita') }}" class="btn btn-primary">Adicionar minha primeira receita</a>
-            {% endif %}
-        </div>
-    {% endif %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Minhas Receitas</h2>
+    <a href="{{ url_for('adicionar_receita') }}" class="btn btn-success">
+        <i data-lucide="plus-circle" class="icon-small"></i>
+        Nova Receita
+    </a>
 </div>
+
+<!-- Formulário de busca e filtro -->
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="busca" class="form-control" placeholder="Buscar por nome..." value="{{ request.args.get('busca', '') }}">
+    </div>
+    <div class="col-md-4">
+        <select name="categoria" class="form-select">
+            <option value="">Todas as categorias</option>
+            <option value="Doce">Doce</option>
+            <option value="Salgado">Salgado</option>
+            <option value="Vegano">Vegano</option>
+            <option value="Vegetariano">Vegetariano</option>
+            <option value="Fitness">Fitness</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+            <i data-lucide="search" class="icon-small"></i>
+            Filtrar
+        </button>
+    </div>
+</form>
+
+{% if receitas %}
+<div class="row">
+    {% for receita in receitas %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 recipe-card">
+            {% if receita.imagem %}
+            <img src="{{ url_for('static', filename=receita.imagem) }}" 
+                 class="card-img-top recipe-img" 
+                 alt="{{ receita.nome }}">
+            {% else %}
+            <div class="recipe-img-placeholder">
+                <i data-lucide="chef-hat" style="width: 64px; height: 64px; color: var(--cor-primaria);"></i>
+            </div>
+            {% endif %}
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ receita.nome }}</h5>
+                <p class="card-text">
+                    <small class="text-muted d-flex flex-wrap gap-2 mb-2">
+                        <span class="badge bg-secondary">{{ receita.categoria }}</span>
+                        <span class="badge bg-info">{{ receita.dificuldade }}</span>
+                    </small>
+                    <span class="d-flex align-items-center gap-1">
+                        <i data-lucide="clock" class="icon-small"></i>
+                        {{ receita.tempo_preparo }} min
+                    </span>
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-sm btn-primary">
+                    <i data-lucide="eye" class="icon-small"></i>
+                    Ver
+                </a>
+                <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-sm btn-warning">
+                    <i data-lucide="edit" class="icon-small"></i>
+                    Editar
+                </a>
+                <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
+                   class="btn btn-sm btn-danger" 
+                   onclick="return confirm('Tem certeza que deseja deletar esta receita?')">
+                    <i data-lucide="trash-2" class="icon-small"></i>
+                    Deletar
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-custom text-center">
+    <i data-lucide="book-open" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+    <p class="mb-3">Você ainda não tem receitas cadastradas.</p>
+    <a href="{{ url_for('adicionar_receita') }}" class="btn btn-primary">
+        <i data-lucide="plus-circle" class="icon-small"></i>
+        Adicionar minha primeira receita
+    </a>
+</div>
+{% endif %}
+
+<script>
+    lucide.createIcons();
+</script>
 {% endblock %}

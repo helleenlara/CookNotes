@@ -19,5 +19,6 @@ class Receita(db.Model):
     tempo_preparo = db.Column(db.Integer)  # em minutos
     categoria = db.Column(db.String(50))
     dificuldade = db.Column(db.String(20))
+    imagem = db.Column(db.String(300))
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)

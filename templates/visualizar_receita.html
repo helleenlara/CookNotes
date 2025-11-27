@@ -2,57 +2,69 @@
 {% block title %}{{ receita.nome }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-10 mx-auto">
-            
-            <!-- Cabeçalho da Receita -->
-            <div class="mb-4">
-                <h2>{{ receita.nome }}</h2>
-                
-                <div class="mb-3">
-                    <span class="badge bg-secondary fs-6">{{ receita.categoria }}</span>
-                    <span class="badge bg-info fs-6">{{ receita.dificuldade }}</span>
-                    <span class="badge bg-warning text-dark fs-6">⏱️ {{ receita.tempo_preparo }} minutos</span>
-                </div>
+<div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto">
+        {% if receita.imagem %}
+        <img src="{{ url_for('static', filename=receita.imagem) }}" 
+             alt="{{ receita.nome }}" 
+             class="recipe-detail-img">
+        {% endif %}
+        
+        <h2>{{ receita.nome }}</h2>
+        
+        <div class="mb-3">
+            <span class="badge bg-secondary">{{ receita.categoria }}</span>
+            <span class="badge bg-info">{{ receita.dificuldade }}</span>
+            <span class="badge bg-warning text-dark">
+                <i data-lucide="clock" class="icon-small"></i>
+                {{ receita.tempo_preparo }} min
+            </span>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i data-lucide="list" class="icon-small"></i>
+                    Ingredientes
+                </h5>
             </div>
-            
-            <!-- Card de Ingredientes -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">📝 Ingredientes</h5>
-                </div>
-                <div class="card-body">
-                    <pre class="mb-0" style="white-space: pre-wrap; font-family: inherit;">{{ receita.ingredientes }}</pre>
-                </div>
+            <div class="card-body">
+                <pre>{{ receita.ingredientes }}</pre>
             </div>
-            
-            <!-- Card de Modo de Preparo -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">👨‍🍳 Modo de Preparo</h5>
-                </div>
-                <div class="card-body">
-                    <pre class="mb-0" style="white-space: pre-wrap; font-family: inherit;">{{ receita.modo_preparo }}</pre>
-                </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header" style="background-color: var(--cor-secundaria); color: white;">
+                <h5 class="mb-0">
+                    <i data-lucide="chef-hat" class="icon-small"></i>
+                    Modo de Preparo
+                </h5>
             </div>
-            
-            <!-- Botões de Ação -->
-            <div class="d-flex gap-2 mb-4">
-                <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-warning">
-                    ✏️ Editar
-                </a>
-                <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
-                    class="btn btn-danger" 
-                    onclick="return confirm('⚠️ Tem certeza que deseja deletar esta receita? Esta ação não pode ser desfeita!')">
-                        🗑️ Deletar
-                </a>
-                <a href="{{ url_for('index') }}" class="btn btn-secondary">
-                        ⬅️ Voltar
-                </a>
+            <div class="card-body">
+                <pre>{{ receita.modo_preparo }}</pre>
             </div>
-
+        </div>
+        
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-warning">
+                <i data-lucide="edit" class="icon-small"></i>
+                Editar
+            </a>
+            <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
+               class="btn btn-danger" 
+               onclick="return confirm('Tem certeza que deseja deletar?')">
+                <i data-lucide="trash-2" class="icon-small"></i>
+                Deletar
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <i data-lucide="arrow-left" class="icon-small"></i>
+                Voltar
+            </a>
         </div>
     </div>
 </div>
+
+<script>
+    lucide.createIcons();
+</script>
 {% endblock %}
