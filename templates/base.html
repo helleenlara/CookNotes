@@ -4,27 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CookNotes{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- CSS Customizado -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% if current_user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- NAVBAR COM MENU SANDUÍCHE -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">🍳 CookNotes</a>
-            <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3 text-white">Olá, {{ current_user.nome }}!</span>
-                <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Sair</a>
+            <!-- Logo e Nome -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="CookNotes Logo" class="logo-img">
+                <span class="brand-name">CookNotes</span>
+            </a>
+            
+            <!-- Botão do Menu Sanduíche (aparece só no mobile) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu que colapsa no mobile -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i data-lucide="home" class="icon-small"></i>
+                            Minhas Receitas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('adicionar_receita') }}">
+                            <i data-lucide="plus-circle" class="icon-small"></i>
+                            Nova Receita
+                        </a>
+                    </li>
+                    
+                    <!-- Dropdown do Usuário -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-menu" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar">{{ current_user.nome[0].upper() }}</div>
+                            <span class="user-name">{{ current_user.nome }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i data-lucide="user" class="icon-small"></i>
+                                    Perfil
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                                    <i data-lucide="log-out" class="icon-small"></i>
+                                    Sair
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
     {% endif %}
     
-    <div class="container mt-4">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="container main-content">
+        <!-- Mensagens Flash -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <div class="alert alert-custom alert-dismissible fade show" role="alert">
+                <i data-lucide="info" class="icon-small"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -32,9 +94,16 @@
         {% endif %}
         {% endwith %}
         
+        <!-- Conteúdo da Página -->
         {% block content %}{% endblock %}
     </div>
     
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Inicializar ícones Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
