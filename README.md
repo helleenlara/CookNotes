@@ -3,7 +3,7 @@ Gerenciador de Receitas – Aplicação Web desenvolvida para a disciplina **Des
 
 **Autora:** Lara Hellen Marques  
 **Deploy:** (adicione aqui o link da sua aplicação na cloud)  
-**Apresentação:** https://www.canva.com/design/DAG56mNQzPk/FH7XUrg4pw5qYwm4sxRtyg/edit?utm_content=DAG56mNQzPk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+**Apresentação:** https://www.canva.com/design/DAG562BDGGE/cl0bmOru2H1BBlC8uIfLxg/edit?utm_content=DAG562BDGGE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ---
 
