@@ -2,43 +2,76 @@
 {% block title %}Editar Receita{% endblock %}
 
 {% block content %}
-<h2>Editar Receita</h2>
+
+<h2 class="mb-4">Editar Receita</h2>
 
 <form method="POST" enctype="multipart/form-data" class="mt-4">
-    
+
+    <!-- IMAGEM ATUAL -->
     {% if receita.imagem %}
-    <div class="mb-3">
+    <div class="mb-4">
         <label class="form-label">Imagem Atual</label>
         <div>
-            <img src="{{ url_for('static', filename=receita.imagem) }}" alt="{{ receita.nome }}" class="img-thumbnail" style="max-width: 300px; max-height: 300px; object-fit: cover;">
+            <img src="{{ url_for('static', filename=receita.imagem) }}" 
+                 alt="{{ receita.nome }}" 
+                 class="img-fluid rounded shadow-sm"
+                 style="max-width: 300px; max-height: 300px; object-fit: cover;">
         </div>
     </div>
     {% endif %}
-    
+
+    <!-- TROCAR IMAGEM COM PREVIEW -->
     <div class="mb-4">
         <label class="form-label">
             {% if receita.imagem %}
-            Trocar Imagem (opcional)
+                Trocar Imagem (opcional)
             {% else %}
-            Adicionar Imagem (opcional)
+                Adicionar Imagem (opcional)
             {% endif %}
         </label>
-        <input type="file" name="imagem" class="form-control" accept="image/*">
+
+        <!-- Novo Preview -->
+        <div class="preview-container mb-2" style="display:none;">
+            <img id="preview-img" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
+        </div>
+
+        <input 
+            type="file" 
+            name="imagem" 
+            id="input-img"
+            class="form-control" 
+            accept="image/*"
+        >
+        
         <small class="text-muted">
-            Formatos aceitos: PNG, JPG, JPEG, GIF, WEBP (máx. 5MB)
+            Formatos aceitos: PNG, JPG, JPEG, GIF, WEBP — Máximo 5MB
         </small>
     </div>
-    
+
+    <!-- DADOS EDITÁVEIS -->
     <div class="mb-3">
         <label class="form-label">Nome da Receita</label>
-        <input type="text" name="nome" class="form-control" value="{{ receita.nome }}" required>
+        <input 
+            type="text" 
+            name="nome" 
+            class="form-control" 
+            value="{{ receita.nome }}" 
+            required
+        >
     </div>
     
     <div class="row">
         <div class="col-md-4 mb-3">
             <label class="form-label">Tempo de Preparo (min)</label>
-            <input type="number" name="tempo_preparo" class="form-control" value="{{ receita.tempo_preparo }}" required>
+            <input 
+                type="number" 
+                name="tempo_preparo" 
+                class="form-control" 
+                value="{{ receita.tempo_preparo }}" 
+                required
+            >
         </div>
+
         <div class="col-md-4 mb-3">
             <label class="form-label">Categoria</label>
             <select name="categoria" class="form-select" required>
@@ -49,6 +82,7 @@
                 <option value="Fitness" {% if receita.categoria == 'Fitness' %}selected{% endif %}>Fitness</option>
             </select>
         </div>
+
         <div class="col-md-4 mb-3">
             <label class="form-label">Dificuldade</label>
             <select name="dificuldade" class="form-select" required>
@@ -58,22 +92,35 @@
             </select>
         </div>
     </div>
-    
+
+    <!-- INGREDIENTES -->
     <div class="mb-3">
         <label class="form-label">Ingredientes</label>
-        <textarea name="ingredientes" class="form-control" rows="5" required>{{ receita.ingredientes }}</textarea>
+        <textarea 
+            name="ingredientes" 
+            class="form-control" 
+            rows="5" 
+            required
+        >{{ receita.ingredientes }}</textarea>
     </div>
-    
+
+    <!-- MODO DE PREPARO -->
     <div class="mb-3">
         <label class="form-label">Modo de Preparo</label>
-        <textarea name="modo_preparo" class="form-control" rows="8" required>{{ receita.modo_preparo }}</textarea>
+        <textarea 
+            name="modo_preparo" 
+            class="form-control" 
+            rows="8" 
+            required
+        >{{ receita.modo_preparo }}</textarea>
     </div>
-    
+
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-success">
             <i data-lucide="save" class="icon-small"></i>
             Salvar Alterações
         </button>
+
         <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-secondary">
             <i data-lucide="x" class="icon-small"></i>
             Cancelar
@@ -81,7 +128,25 @@
     </div>
 </form>
 
+
 <script>
     lucide.createIcons();
+
+    // PREVIEW DA IMAGEM NOVA
+    document.getElementById("input-img").addEventListener("change", function(event) {
+        const arquivo = event.target.files[0];
+        const previewContainer = document.querySelector(".preview-container");
+        const previewImg = document.getElementById("preview-img");
+
+        if (arquivo) {
+            const url = URL.createObjectURL(arquivo);
+            previewImg.src = url;
+            previewContainer.style.display = "block";
+        } else {
+            previewContainer.style.display = "none";
+            previewImg.src = "";
+        }
+    });
 </script>
+
 {% endblock %}

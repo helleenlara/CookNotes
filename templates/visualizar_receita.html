@@ -2,60 +2,72 @@
 {% block title %}{{ receita.nome }}{% endblock %}
 
 {% block content %}
-<div class="row">
+
+<div class="row fade-in">
     <div class="col-md-10 col-lg-8 mx-auto">
+
+        <!-- IMAGEM DA RECEITA -->
         {% if receita.imagem %}
-        <img src="{{ url_for('static', filename=receita.imagem) }}" 
-             alt="{{ receita.nome }}" 
-             class="recipe-detail-img">
+        <div class="recipe-image-wrapper mb-4">
+            <img src="{{ url_for('static', filename=receita.imagem) }}" 
+                 alt="{{ receita.nome }}" 
+                 class="recipe-detail-img shadow-sm rounded">
+        </div>
         {% endif %}
-        
-        <h2>{{ receita.nome }}</h2>
-        
-        <div class="mb-3">
+
+        <!-- TÍTULO -->
+        <h2 class="fw-bold">{{ receita.nome }}</h2>
+
+        <!-- TAGS -->
+        <div class="mb-3 d-flex flex-wrap gap-2">
             <span class="badge bg-secondary">{{ receita.categoria }}</span>
-            <span class="badge bg-info">{{ receita.dificuldade }}</span>
-            <span class="badge bg-warning text-dark">
+            <span class="badge bg-info text-dark">{{ receita.dificuldade }}</span>
+            <span class="badge bg-warning text-dark d-flex align-items-center gap-1">
                 <i data-lucide="clock" class="icon-small"></i>
                 {{ receita.tempo_preparo }} min
             </span>
         </div>
-        
-        <div class="card mb-3">
+
+        <!-- INGREDIENTES -->
+        <div class="card mb-3 shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">
+                <h5 class="mb-0 d-flex align-items-center gap-2">
                     <i data-lucide="list" class="icon-small"></i>
                     Ingredientes
                 </h5>
             </div>
             <div class="card-body">
-                <pre>{{ receita.ingredientes }}</pre>
+                <pre class="formatted-text">{{ receita.ingredientes }}</pre>
             </div>
         </div>
-        
-        <div class="card mb-3">
+
+        <!-- MODO DE PREPARO -->
+        <div class="card mb-4 shadow-sm">
             <div class="card-header" style="background-color: var(--cor-secundaria); color: white;">
-                <h5 class="mb-0">
+                <h5 class="mb-0 d-flex align-items-center gap-2">
                     <i data-lucide="chef-hat" class="icon-small"></i>
                     Modo de Preparo
                 </h5>
             </div>
             <div class="card-body">
-                <pre>{{ receita.modo_preparo }}</pre>
+                <pre class="formatted-text">{{ receita.modo_preparo }}</pre>
             </div>
         </div>
-        
+
+        <!-- BOTÕES -->
         <div class="d-flex gap-2">
+
             <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-warning">
                 <i data-lucide="edit" class="icon-small"></i>
                 Editar
             </a>
-            <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
-               class="btn btn-danger" 
-               onclick="return confirm('Tem certeza que deseja deletar?')">
+
+            <!-- Botão para abrir o modal -->
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExcluir">
                 <i data-lucide="trash-2" class="icon-small"></i>
                 Deletar
-            </a>
+            </button>
+
             <a href="{{ url_for('index') }}" class="btn btn-secondary">
                 <i data-lucide="arrow-left" class="icon-small"></i>
                 Voltar
@@ -64,7 +76,69 @@
     </div>
 </div>
 
+<!-- MODAL BONITO DE CONFIRMAÇÃO -->
+<div class="modal fade" id="modalExcluir" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i data-lucide="alert-triangle"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="mb-2">Tem certeza que deseja excluir a receita:</p>
+                <strong>{{ receita.nome }}</strong>
+                <p class="mt-3 text-danger fw-bold">Esta ação não pode ser desfeita.</p>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <a href="{{ url_for('deletar_receita', id=receita.id) }}" class="btn btn-danger">
+                    <i data-lucide="trash-2" class="icon-small"></i>
+                    Deletar
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ÍCONES LUCIDE -->
 <script>
     lucide.createIcons();
 </script>
+
+<style>
+    /* Melhor formatação do texto */
+    pre.formatted-text {
+        white-space: pre-wrap;
+        font-family: inherit;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Efeito suave na imagem */
+    .recipe-detail-img:hover {
+        transform: scale(1.02);
+        transition: 0.2s;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; translate: 0 10px; }
+        to { opacity: 1; translate: 0 0; }
+    }
+</style>
+
 {% endblock %}

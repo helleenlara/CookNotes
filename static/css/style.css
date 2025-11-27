@@ -692,3 +692,49 @@ pre {
   border-radius: var(--borda-botao);
   border-left: 3px solid var(--cor-secundaria);
 }
+
+/* Inteções js avançadas */
+/* Animação de cards */
+.card {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all .4s ease;
+}
+
+.card.animado {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Busca instantânea */
+.fade-out {
+    opacity: 0;
+    transform: scale(.95);
+    transition: all .3s ease;
+}
+
+.fade-in {
+    opacity: 1;
+    transform: scale(1);
+    transition: all .3s ease;
+}
+
+/* Validação de senha em tempo real */
+.password-requirements ul li.valid {
+    color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+.password-requirements ul li.invalid {
+    color: var(--cor-erro);
+}
+
+.password-requirements ul li.valid::before {
+    content: "✓";
+    color: var(--cor-primaria);
+}
+
+.password-requirements ul li.invalid::before {
+    content: "✗";
+    color: var(--cor-erro);
+}

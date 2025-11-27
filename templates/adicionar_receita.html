@@ -2,27 +2,42 @@
 {% block title %}Nova Receita{% endblock %}
 
 {% block content %}
-<h2>Adicionar Nova Receita</h2>
+
+<h2 class="mb-4">Adicionar Nova Receita</h2>
 
 <form method="POST" enctype="multipart/form-data" class="mt-4">
-    
+
+    <!-- PREVIEW DA IMAGEM -->
     <div class="mb-4">
         <label class="form-label">Imagem da Receita (opcional)</label>
-        <input type="file" name="imagem" class="form-control" accept="image/*">
+        
+        <!-- Preview -->
+        <div class="preview-container mb-2" style="display:none;">
+            <img id="preview-img" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
+        </div>
+
+        <input 
+            type="file" 
+            name="imagem" 
+            id="input-img"
+            class="form-control"
+            accept="image/*"
+        >
+
         <small class="text-muted">
-            Formatos aceitos: PNG, JPG, JPEG, GIF, WEBP (máx. 5MB)
+            Formatos aceitos: PNG, JPG, JPEG, GIF, WEBP — Máximo 5MB
         </small>
     </div>
-    
+
     <div class="mb-3">
         <label class="form-label">Nome da Receita</label>
-        <input type="text" name="nome" class="form-control" required>
+        <input type="text" name="nome" class="form-control" required placeholder="Ex: Bolo de Cenoura">
     </div>
-    
+
     <div class="row">
         <div class="col-md-4 mb-3">
             <label class="form-label">Tempo de Preparo (min)</label>
-            <input type="number" name="tempo_preparo" class="form-control" required>
+            <input type="number" name="tempo_preparo" class="form-control" required placeholder="Ex: 30">
         </div>
         <div class="col-md-4 mb-3">
             <label class="form-label">Categoria</label>
@@ -45,22 +60,35 @@
             </select>
         </div>
     </div>
-    
+
     <div class="mb-3">
         <label class="form-label">Ingredientes</label>
-        <textarea name="ingredientes" class="form-control" rows="5" required placeholder="Ex:&#10;- 2 xícaras de farinha&#10;- 3 ovos&#10;- 1 xícara de açúcar"></textarea>
+        <textarea 
+            name="ingredientes" 
+            class="form-control" 
+            rows="5" 
+            required
+            placeholder="Ex:&#10;- 2 xícaras de farinha&#10;- 3 ovos&#10;- 1 xícara de açúcar"
+        ></textarea>
     </div>
-    
+
     <div class="mb-3">
         <label class="form-label">Modo de Preparo</label>
-        <textarea name="modo_preparo" class="form-control" rows="8" required placeholder="Descreva o passo a passo..."></textarea>
+        <textarea 
+            name="modo_preparo" 
+            class="form-control" 
+            rows="8" 
+            required 
+            placeholder="Descreva o passo a passo..."
+        ></textarea>
     </div>
-    
+
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-success">
             <i data-lucide="save" class="icon-small"></i>
             Salvar Receita
         </button>
+
         <a href="{{ url_for('index') }}" class="btn btn-secondary">
             <i data-lucide="x" class="icon-small"></i>
             Cancelar
@@ -70,5 +98,22 @@
 
 <script>
     lucide.createIcons();
+
+    // PREVIEW DA IMAGEM
+    document.getElementById("input-img").addEventListener("change", function(event) {
+        const arquivo = event.target.files[0];
+        const previewContainer = document.querySelector(".preview-container");
+        const previewImg = document.getElementById("preview-img");
+
+        if (arquivo) {
+            const url = URL.createObjectURL(arquivo);
+            previewImg.src = url;
+            previewContainer.style.display = "block";
+        } else {
+            previewContainer.style.display = "none";
+            previewImg.src = "";
+        }
+    });
 </script>
+
 {% endblock %}

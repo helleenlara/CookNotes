@@ -2,6 +2,7 @@
 {% block title %}Minhas Receitas{% endblock %}
 
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Minhas Receitas</h2>
     <a href="{{ url_for('adicionar_receita') }}" class="btn btn-success">
@@ -10,11 +11,18 @@
     </a>
 </div>
 
-<!-- Formulário de busca e filtro -->
+<!-- FORMULÁRIO DE BUSCA E FILTRO -->
 <form method="GET" class="row g-3 mb-4">
     <div class="col-md-6">
-        <input type="text" name="busca" class="form-control" placeholder="Buscar por nome..." value="{{ request.args.get('busca', '') }}">
+        <input 
+            type="text" 
+            name="busca" 
+            class="form-control" 
+            placeholder="Buscar por nome..."
+            value="{{ request.args.get('busca', '') }}"
+        >
     </div>
+
     <div class="col-md-4">
         <select name="categoria" class="form-select">
             <option value="">Todas as categorias</option>
@@ -25,6 +33,7 @@
             <option value="Fitness">Fitness</option>
         </select>
     </div>
+
     <div class="col-md-2">
         <button type="submit" class="btn btn-primary w-100">
             <i data-lucide="search" class="icon-small"></i>
@@ -38,16 +47,17 @@
     {% for receita in receitas %}
     <div class="col-md-6 col-lg-4 mb-4">
         <div class="card h-100 recipe-card">
+
             {% if receita.imagem %}
-            <img src="{{ url_for('static', filename=receita.imagem) }}" 
-                 class="card-img-top recipe-img" 
-                 alt="{{ receita.nome }}">
+                <img src="{{ url_for('static', filename=receita.imagem) }}" 
+                     class="card-img-top recipe-img" 
+                     alt="{{ receita.nome }}">
             {% else %}
-            <div class="recipe-img-placeholder">
-                <i data-lucide="chef-hat" style="width: 64px; height: 64px; color: var(--cor-primaria);"></i>
-            </div>
+                <div class="recipe-img-placeholder">
+                    <i data-lucide="chef-hat" style="width: 64px; height: 64px; color: var(--cor-primaria);"></i>
+                </div>
             {% endif %}
-            
+
             <div class="card-body">
                 <h5 class="card-title">{{ receita.nome }}</h5>
                 <p class="card-text">
@@ -61,22 +71,27 @@
                     </span>
                 </p>
             </div>
-            <div class="card-footer">
+
+            <div class="card-footer d-flex justify-content-between">
                 <a href="{{ url_for('visualizar_receita', id=receita.id) }}" class="btn btn-sm btn-primary">
-                    <i data-lucide="eye" class="icon-small"></i>
-                    Ver
+                    <i data-lucide="eye" class="icon-small"></i> Ver
                 </a>
+
                 <a href="{{ url_for('editar_receita', id=receita.id) }}" class="btn btn-sm btn-warning">
-                    <i data-lucide="edit" class="icon-small"></i>
-                    Editar
+                    <i data-lucide="edit" class="icon-small"></i> Editar
                 </a>
-                <a href="{{ url_for('deletar_receita', id=receita.id) }}" 
-                   class="btn btn-sm btn-danger" 
-                   onclick="return confirm('Tem certeza que deseja deletar esta receita?')">
-                    <i data-lucide="trash-2" class="icon-small"></i>
-                    Deletar
-                </a>
+
+                <button 
+                    class="btn btn-sm btn-danger"
+                    onclick="confirmarDelecaoModal(
+                        '{{ receita.nome }}',
+                        '{{ url_for('deletar_receita', id=receita.id) }}'
+                    )"
+                >
+                    <i data-lucide="trash-2" class="icon-small"></i> Deletar
+                </button>
             </div>
+
         </div>
     </div>
     {% endfor %}
@@ -98,4 +113,5 @@
 <script>
     lucide.createIcons();
 </script>
+
 {% endblock %}

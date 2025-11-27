@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Minhas Receitas</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS Customizado -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Ícones Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="auth-page">
+
     <div class="auth-container">
-        <div class="auth-card">
-            <!-- Logo e Boas-vindas -->
+        <div class="auth-card fade-in">
+
+            <!-- Logo e Texto -->
             <div class="auth-logo text-center">
                 <img src="{{ url_for('static', filename='img/logo2.png') }}" 
                      alt="Logo" class="img-fluid mb-2" style="max-width: 200px;">
-                <p class="welcome-text">Seja bem-vindo! Entre para acessar suas receitas.</p>
+                <p class="welcome-text">Seja bem-vindo(a)! Acesse suas receitas favoritas.</p>
             </div>
-            
+
             <!-- Mensagens Flash -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -29,45 +38,89 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            
-            <!-- Formulário de Login -->
+
+            <!-- Formulário -->
             <form method="POST" class="auth-form">
+
+                <!-- Email -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i data-lucide="mail" class="icon-small"></i>
                         </span>
-                        <input type="email" name="email" class="form-control" required autofocus>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            class="form-control"
+                            autocomplete="email"
+                            required autofocus
+                        >
                     </div>
                 </div>
-                
+
+                <!-- SENHA com botão mostrar/ocultar -->
                 <div class="mb-4">
                     <label class="form-label">Senha</label>
+
                     <div class="input-group">
                         <span class="input-group-text">
                             <i data-lucide="lock" class="icon-small"></i>
                         </span>
-                        <input type="password" name="senha" class="form-control" required>
+
+                        <input 
+                            type="password" 
+                            name="senha"
+                            id="senhaLogin"
+                            class="form-control"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <!-- botão olho -->
+                        <span class="input-group-text senha-toggle" style="cursor:pointer;">
+                            <i data-lucide="eye" id="toggleIcon"></i>
+                        </span>
                     </div>
                 </div>
-                
+
+                <!-- Botão Entrar -->
                 <button type="submit" class="btn btn-primary w-100 mb-3">
                     <i data-lucide="log-in" class="icon-small"></i>
                     Entrar
                 </button>
-                
+
                 <p class="text-center text-muted">
-                    Não tem uma conta? 
+                    Não tem uma conta?
                     <a href="{{ url_for('cadastro') }}" class="link-primary">Cadastre-se</a>
                 </p>
+
             </form>
         </div>
     </div>
-    
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         lucide.createIcons();
+
+        // Mostrar / Ocultar senha
+        const toggleBtn = document.querySelector(".senha-toggle");
+        const senhaCampo = document.getElementById("senhaLogin");
+        const toggleIcon = document.getElementById("toggleIcon");
+
+        toggleBtn.addEventListener("click", () => {
+            if (senhaCampo.type === "password") {
+                senhaCampo.type = "text";
+                toggleIcon.setAttribute("data-lucide", "eye-off");
+            } else {
+                senhaCampo.type = "password";
+                toggleIcon.setAttribute("data-lucide", "eye");
+            }
+            lucide.createIcons();
+        });
     </script>
+
 </body>
 </html>
