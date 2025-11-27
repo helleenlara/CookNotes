@@ -1,4 +1,4 @@
-# 🍳 CookNotes  
+# CookNotes  
 Gerenciador de Receitas – Aplicação Web desenvolvida para a disciplina **Desenvolvimento Web Python – Paradigmas**.
 
 **Autora:** Lara Hellen Marques  
@@ -7,7 +7,7 @@ Gerenciador de Receitas – Aplicação Web desenvolvida para a disciplina **Des
 
 ---
 
-## 📖 Sobre o projeto
+##  Sobre o projeto
 
 O **CookNotes** é uma aplicação web que permite gerenciar receitas culinárias de forma simples e intuitiva.  
 O sistema inclui **autenticação**, **CRUD completo**, **busca**, **perfil do usuário** e está preparado para **deploy em cloud (Railway)**.
@@ -16,7 +16,7 @@ Este projeto foi desenvolvido individualmente como parte da Avaliação da disci
 
 ---
 
-## 🎯 Objetivos acadêmicos atendidos
+##  Objetivos acadêmicos atendidos
 
 ✔ Implementar uma aplicação web com **frontend (Bootstrap/HTML/CSS/JS)** e **backend em Python**  
 ✔ Usar um **banco de dados relacional (PostgreSQL)**  
@@ -28,30 +28,30 @@ Este projeto foi desenvolvido individualmente como parte da Avaliação da disci
 
 ---
 
-# ✅ Funcionalidades
+#  Funcionalidades
 
-### 👤 **1. Login e Autenticação**
+###  **1. Login e Autenticação**
 - Cadastro de usuário
 - Login com verificação
 - Armazenamento seguro
 
-### 📚 **2. CRUD de Receitas (RF principal)**
+###  **2. CRUD de Receitas (RF principal)**
 - ✔ Criar receitas  
 - ✔ Listar receitas  
 - ✔ Editar receitas  
 - ✔ Excluir receitas  
 - ✔ Visualizar detalhes  
 
-### 🔎 **3. Busca e filtros**
+###  **3. Busca e filtros**
 - Busca por nome ou categoria
 
-### 🧑‍💻 **4. Perfil do Usuário**
+###  **4. Perfil do Usuário**
 - Atualizar dados
 - Alterar senha com validação forte
 
 ---
 
-# 📌 Requisitos Funcionais (RF)
+#  Requisitos Funcionais (RF)
 
 | Código | Descrição |
 |-------|-----------|
@@ -66,7 +66,7 @@ Este projeto foi desenvolvido individualmente como parte da Avaliação da disci
 
 ---
 
-# 📌 Requisitos Não Funcionais (RNF)
+#  Requisitos Não Funcionais (RNF)
 
 | Código | Descrição |
 |-------|-----------|
@@ -78,7 +78,7 @@ Este projeto foi desenvolvido individualmente como parte da Avaliação da disci
 
 ---
 
-# 🏛️ Arquitetura da Aplicação
+#  Arquitetura da Aplicação
 
 Usuário
 ↓
@@ -92,7 +92,7 @@ PostgreSQL (Railway)
 
 ---
 
-# 📂 Estrutura de Pastas
+#  Estrutura de Pastas
 
 CookNotes/
 │
@@ -121,7 +121,7 @@ CookNotes/
 
 ---
 
-# 🧱 Modelos (Exemplo)
+#  Modelos (Exemplo)
 
 ### **Modelo Usuário**
 
@@ -141,7 +141,7 @@ class Receita(db.Model):
     categoria = db.Column(db.String(50))
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
 
-## 🌐 Rotas da Aplicação
+##  Rotas da Aplicação
 
 Rota	Método	Descrição
 /	GET	Página inicial
@@ -153,7 +153,7 @@ Rota	Método	Descrição
 /receitas/excluir/<id>	POST	Excluir receita
 /perfil	GET/POST	Perfil do usuário
 
-## 💻 Como rodar o projeto localmente
+##  Como rodar o projeto localmente
 
 1. Clone o repositório
 
@@ -184,7 +184,7 @@ SECRET_KEY=sua_chave_secreta
 6. Execute
 flask run
 
-## 🚀 Deploy no Railway
+##  Deploy no Railway
 1.Criar conta no Railway
 2.Criar projeto “New Service → Deploy from GitHub”
 3.Conectar seu repositório CookNotes
@@ -192,10 +192,10 @@ flask run
 5.Conectar PostgreSQL via “Add Plugin”
 6.Redeploy automático
 
-## 📜 Licença
+##  Licença
 Este projeto está sob a licença MIT.
 
-## ✨ Autoria
+##  Autoria
 Desenvolvido por:
-Lara Hellen Marques
+Lara Hellen Marques,
 Projeto individual – 2025.
