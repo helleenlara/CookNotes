@@ -587,3 +587,108 @@ pre {
 .auth-form .input-group-text {
   border-color: #dee2e6;
 }
+
+/* Pagina de Perfil */
+
+/* Avatar Grande */
+.user-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2rem;
+  box-shadow: var(--sombra-media);
+}
+
+/* Requisitos de Senha */
+.password-requirements {
+  background-color: var(--fundo-card);
+  border-left: 4px solid var(--cor-secundaria);
+  padding: 1rem;
+  border-radius: var(--borda-botao);
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.password-requirements ul li {
+  padding: 0.25rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.password-requirements ul li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--cor-primaria);
+  font-weight: bold;
+}
+
+/* Estatísticas */
+.stat-card {
+  padding: 1.5rem;
+  background-color: var(--fundo-card);
+  border-radius: var(--borda-card);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-media);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--cor-primaria);
+  margin-bottom: 1rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* Responsividade do Perfil */
+@media (max-width: 768px) {
+  .user-avatar-large {
+    width: 64px;
+    height: 64px;
+    font-size: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Requisitos de senha pequenos (cadastro/login) */
+
+.password-requirements-small {
+  background-color: var(--fundo-card);
+  padding: 0.75rem;
+  border-radius: var(--borda-botao);
+  border-left: 3px solid var(--cor-secundaria);
+}

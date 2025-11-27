@@ -50,30 +50,46 @@ def load_user(user_id):
 # Rota de cadastro
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    
     if request.method == 'POST':
         nome = request.form['nome']
         email = request.form['email']
         senha = request.form['senha']
         
-        if Usuario.query.filter_by(email=email).first():
+        # Verifica se email já existe
+        usuario_existe = Usuario.query.filter_by(email=email).first()
+        if usuario_existe:
             flash('Este email já está cadastrado!')
+            return redirect(url_for('cadastro'))
+        
+        # VALIDAÇÃO DE SENHA FORTE
+        if len(senha) < 8:
+            flash('A senha deve ter no mínimo 8 caracteres!')
+            return redirect(url_for('cadastro'))
+        
+        if not any(c.isupper() for c in senha):
+            flash('A senha deve conter pelo menos uma letra MAIÚSCULA!')
+            return redirect(url_for('cadastro'))
+        
+        if not any(c.islower() for c in senha):
+            flash('A senha deve conter pelo menos uma letra minúscula!')
+            return redirect(url_for('cadastro'))
+        
+        if not any(c.isdigit() for c in senha):
+            flash('A senha deve conter pelo menos um número!')
+            return redirect(url_for('cadastro'))
+        
+        if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in senha):
+            flash('A senha deve conter pelo menos um caractere especial (!@#$%^&*)')
             return redirect(url_for('cadastro'))
         
         # Cria novo usuário
         senha_hash = generate_password_hash(senha)
         novo_usuario = Usuario(nome=nome, email=email, senha=senha_hash)
-        
         db.session.add(novo_usuario)
         db.session.commit()
         
-        # Faz login automático
-        login_user(novo_usuario)
-        flash('Cadastro realizado com sucesso! Bem-vindo(a)!')
-        
-        return redirect(url_for('index'))
+        flash('Cadastro realizado com sucesso! Faça login.')
+        return redirect(url_for('login'))
     
     return render_template('cadastro.html')
 
@@ -100,6 +116,84 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+# Rota de perfil
+@app.route('/perfil', methods=['GET', 'POST'])
+@login_required
+def perfil():
+    if request.method == 'POST':
+        acao = request.form.get('acao')
+        
+        # ATUALIZAR INFORMAÇÕES BÁSICAS (nome e email)
+        if acao == 'atualizar_info':
+            novo_nome = request.form.get('nome')
+            novo_email = request.form.get('email')
+            
+            # Validar se campos não estão vazios
+            if not novo_nome or not novo_email:
+                flash('Nome e email são obrigatórios!')
+                return redirect(url_for('perfil'))
+            
+            # Verificar se email já existe (se mudou)
+            if novo_email != current_user.email:
+                email_existe = Usuario.query.filter_by(email=novo_email).first()
+                if email_existe:
+                    flash('Este email já está em uso!')
+                    return redirect(url_for('perfil'))
+            
+            # Atualizar dados
+            current_user.nome = novo_nome
+            current_user.email = novo_email
+            db.session.commit()
+            
+            flash('Informações atualizadas com sucesso!')
+            return redirect(url_for('perfil'))
+        
+        # ALTERAR SENHA
+        elif acao == 'alterar_senha':
+            senha_atual = request.form.get('senha_atual')
+            nova_senha = request.form.get('nova_senha')
+            confirmar_senha = request.form.get('confirmar_senha')
+            
+            # Verificar se a senha atual está correta
+            if not check_password_hash(current_user.senha, senha_atual):
+                flash('Senha atual incorreta!')
+                return redirect(url_for('perfil'))
+            
+            # Validar nova senha
+            if nova_senha != confirmar_senha:
+                flash('As senhas não coincidem!')
+                return redirect(url_for('perfil'))
+            
+            # VALIDAÇÃO DE SENHA FORTE
+            if len(nova_senha) < 8:
+                flash('A senha deve ter no mínimo 8 caracteres!')
+                return redirect(url_for('perfil'))
+            
+            if not any(c.isupper() for c in nova_senha):
+                flash('A senha deve conter pelo menos uma letra MAIÚSCULA!')
+                return redirect(url_for('perfil'))
+            
+            if not any(c.islower() for c in nova_senha):
+                flash('A senha deve conter pelo menos uma letra minúscula!')
+                return redirect(url_for('perfil'))
+            
+            if not any(c.isdigit() for c in nova_senha):
+                flash('A senha deve conter pelo menos um número!')
+                return redirect(url_for('perfil'))
+            
+            if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in nova_senha):
+                flash('A senha deve conter pelo menos um caractere especial (!@#$%^&*)')
+                return redirect(url_for('perfil'))
+            
+            # Atualizar senha
+            current_user.senha = generate_password_hash(nova_senha)
+            db.session.commit()
+            
+            flash('Senha alterada com sucesso!')
+            return redirect(url_for('perfil'))
+    
+    return render_template('perfil.html')
 
 # Rota principal
 @app.route('/')

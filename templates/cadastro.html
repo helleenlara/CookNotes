@@ -52,15 +52,21 @@
                     </div>
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Senha</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i data-lucide="lock" class="icon-small"></i>
-                        </span>
-                        <input type="password" name="senha" class="form-control" required minlength="6">
+                    <input type="password" name="senha" class="form-control" required>
+                    
+                    <!-- Requisitos de Senha -->
+                    <div class="password-requirements-small mt-2">
+                        <small class="text-muted">
+                            <strong>Sua senha deve conter:</strong><br>
+                            • Mínimo 8 caracteres<br>
+                            • Uma letra MAIÚSCULA<br>
+                            • Uma letra minúscula<br>
+                            • Um número<br>
+                            • Um caractere especial (!@#$%^&*)
+                        </small>
                     </div>
-                    <small class="text-muted">Mínimo 6 caracteres</small>
                 </div>
                 
                 <button type="submit" class="btn btn-success w-100 mb-3">

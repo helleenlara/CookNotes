@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil - CookNotes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Cabeçalho da Página -->
+        <div class="d-flex align-items-center mb-4">
+            <div class="user-avatar-large me-3">{{ current_user.nome[0].upper() }}</div>
+            <div>
+                <h2 class="mb-0">Meu Perfil</h2>
+                <p class="text-muted mb-0">Gerencie suas informações pessoais</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- CARD 1: Informações Básicas -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        <i data-lucide="user" class="icon-small"></i>
+                        Informações Básicas
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <input type="hidden" name="acao" value="atualizar_info">
+                            
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome Completo</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="nome" 
+                                    name="nome" 
+                                    value="{{ current_user.nome }}" 
+                                    required
+                                    placeholder="Seu nome completo"
+                                >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="email" 
+                                    name="email" 
+                                    value="{{ current_user.email }}" 
+                                    required
+                                    placeholder="seu@email.com"
+                                >
+                                <small class="text-muted">Você usará este email para fazer login</small>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i data-lucide="save" class="icon-small"></i>
+                                Salvar Alterações
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: Alterar Senha -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        <i data-lucide="lock" class="icon-small"></i>
+                        Segurança
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <input type="hidden" name="acao" value="alterar_senha">
+                            
+                            <div class="mb-3">
+                                <label for="senha_atual" class="form-label">Senha Atual</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="senha_atual" 
+                                    name="senha_atual" 
+                                    required
+                                    placeholder="Digite sua senha atual"
+                                >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nova_senha" class="form-label">Nova Senha</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="nova_senha" 
+                                    name="nova_senha" 
+                                    required
+                                    placeholder="Digite sua nova senha"
+                                >
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmar_senha" class="form-label">Confirmar Nova Senha</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="confirmar_senha" 
+                                    name="confirmar_senha" 
+                                    required
+                                    placeholder="Digite novamente"
+                                >
+                            </div>
+
+                            <!-- Requisitos de Senha -->
+                            <div class="password-requirements mb-3">
+                                <p class="mb-2"><strong>Requisitos de segurança:</strong></p>
+                                <ul class="small text-muted mb-0">
+                                    <li>Mínimo de 8 caracteres</li>
+                                    <li>Pelo menos uma letra MAIÚSCULA</li>
+                                    <li>Pelo menos uma letra minúscula</li>
+                                    <li>Pelo menos um número (0-9)</li>
+                                    <li>Pelo menos um caractere especial (!@#$%^&*)</li>
+                                </ul>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i data-lucide="shield" class="icon-small"></i>
+                                Alterar Senha
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3: Estatísticas -->
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i data-lucide="bar-chart-2" class="icon-small"></i>
+                Suas Estatísticas
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="stat-card">
+                            <i data-lucide="book-open" class="stat-icon"></i>
+                            <h3 class="stat-number">{{ current_user.receitas|length }}</h3>
+                            <p class="stat-label">Receitas Cadastradas</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="stat-card">
+                            <i data-lucide="calendar" class="stat-icon"></i>
+                            <h3 class="stat-number">{{ current_user.receitas|length * 30 }}</h3>
+                            <p class="stat-label">Minutos de Preparo Total</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <i data-lucide="star" class="stat-icon"></i>
+                            <h3 class="stat-number">
+                                {% if current_user.receitas|length > 10 %}Mestre{% elif current_user.receitas|length > 5 %}Experiente{% else %}Iniciante{% endif %}
+                            </h3>
+                            <p class="stat-label">Nível Culinário</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão Voltar -->
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <i data-lucide="arrow-left" class="icon-small"></i>
+                Voltar para Minhas Receitas
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
