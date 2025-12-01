@@ -2,7 +2,7 @@
 Gerenciador de Receitas – Aplicação Web desenvolvida para a disciplina **Desenvolvimento Web Python – Paradigmas**.
 
 **Autora:** Lara Hellen Marques  
-**Deploy:** (adicione aqui o link da sua aplicação na cloud)  
+**Deploy:** https://cooknotes-production.up.railway.app/login
 **Apresentação:** https://www.canva.com/design/DAG562BDGGE/cl0bmOru2H1BBlC8uIfLxg/edit?utm_content=DAG562BDGGE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ---
